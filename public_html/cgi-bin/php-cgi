@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# This script is used to run PHP scripts. It exists because the CS webserver
+# runs PHP scripts under the UID of their owner, but doing that requires the
+# PHP interpreter to be launched from within the owner's home directory, so
+# that's what the line below does. Changing this script is not recommended;
+# doing so can render PHP unusable for you.
+exec /usr/bin/php-cgi

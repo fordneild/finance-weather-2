@@ -1,0 +1,12 @@
+1,Industrials
+2,Health Care
+3,Information Technology
+4,Consumer Discretionary
+5,Utilities
+6,Financials
+7,Materials
+8,Real Estate
+9,Consumer Staples
+10,Energy
+11,Telecommunication Services
+12,Health Care

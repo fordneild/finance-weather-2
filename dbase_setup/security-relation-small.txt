@@ -1,0 +1,15 @@
+MMM,1,3M Company
+AOS,1,A.O. Smith Corp
+ABT,2,Abbott Laboratories
+ABBV,2,AbbVie Inc.
+ACN,3,Accenture plc
+ATVI,3,Activision Blizzard
+AYI,1,Acuity Brands Inc
+ADBE,3,Adobe Systems Inc
+AAP,4,Advance Auto Parts
+AMD,3,Advanced Micro Devices Inc
+AES,5,AES Corp
+AET,2,Aetna Inc
+AMG,6,Affiliated Managers Group Inc
+AFL,6,AFLAC Inc
+A,2,Agilent Technologies Inc
