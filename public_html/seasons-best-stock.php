@@ -1,5 +1,5 @@
  <head>
-	<title>Show Raw Scores For One Student</title>
+	<title>Show Prices</title>
  </head>
  <body>
  <?php
@@ -7,9 +7,10 @@
 
 function outputResultsTableHeader() {
     echo "<tr>";
-    echo "<th> Percipitation </th>";
-    echo "<th> Max Temp </th>";
-    echo "<th> Min Temp </th>";
+    echo "<th> Company Name </th>";
+    echo "<th> Symbol </th>";
+    echo "<th> Avg Gain </th>";
+    echo "<th> Volume Traded in Season </th>";
     echo "</tr>";
 }
 
@@ -25,9 +26,8 @@ ini_set('display_errors', true);   // report errors to screen (don't hide from u
 
 // Collect the data input posted here from the calling page
 // The associative array called S_POST stores data using names as indices
-$MM = $_POST['MM'];
-$DD = $_POST['DD'];
-$YY = $_POST['YY'];
+
+$Seasons = $_POST['Seasons'];
 
 
 // Call the stored procedure named ShowRawScores
@@ -35,7 +35,42 @@ $YY = $_POST['YY'];
 // It returns true if first statement executed successfully; false otherwise.
 // Results of first statement are retrieved via $mysqli->store_result()
 // from which we can call ->fetch_row() to see successive rows
-if ($mysqli->multi_query("SELECT FORECAST.Precipitation, FORECAST.MaxTemp, FORECAST.MinTemp FROM FORECAST, DATES WHERE DATES.ID = FORECAST.DateID AND DATES.MM = '".$MM."' AND DATES.DD = '".$DD."' AND DATES.YY = '".$YY."';")) {
+
+//Multiple queries to be called.
+
+if (.$Seasons. = "Winter") {
+
+$sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 12 OR MM = 1 OR MM = 2;";
+
+
+}
+
+if (.$Seasons. = "Summer") {
+
+$sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 6 OR MM = 7 OR MM = 8;";
+
+echo "Reached HERE";
+
+}
+
+if (.$Seasons. = "Spring") {
+
+$sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 3 OR MM = 4 OR MM = 5;";
+
+}
+
+if (.$Seasons. = "Fall") {
+
+$sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 9 OR MM = 10 OR MM = 11;";
+
+}
+
+//second query is to find all the stock prices for those dates and avergae them.
+
+$sql.= "SELECT CompanyName, Symbol, GAIN, Volume FROM SECURITIES JOIN (SELECT Symbol, AVG(100*(TRADES.ClosePrice - TRADES.OpenPrice)/TRADES.OpenPrice) AS GAIN, Volume FROM TRADES WHERE DateID in rSeasons GROUP BY Symbol) AS Calc on SECURITIES.Symbol = Calc.Symbol;";
+
+
+if ($mysqli->multi_query($sql)) {
 
     // Check if a result was returned after the call
     if ($result = $mysqli->store_result()) {
