@@ -13,8 +13,7 @@
 
 </head>
 
-<body style="display: flex; flex-direction: column; align-items:center;">
-<h1>Its alive!</h1>
+<body>
 <div class="question">
     <h1>Find all the dates we have information on</h1>
     <form action="dates.php" method="post">
@@ -41,6 +40,16 @@
         <button type="submit">Submit</button>
     </form>
 </div>
+<div class="question">
+    <h1>Given a temp and rain level, find the sectors that had the highest percent growth across all days that meet those conditions</h1>
+    <p>Note: We only have work days from March 2013 - January 2018</p>
+    <form action="weather-to-best-sectors.php" method="post">
+        <label>Temp(F): <input name="TEMP" type="number" step=10/></label>
+        <label>Rain: <input name="RAIN" type="checkbox" min=1 max=31 step=1/></label>
+        <label>Max Results: <input name="LIMIT" type="number" min=0 max=20 step=5/></label>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+</body>
 
 </html>
-</body>

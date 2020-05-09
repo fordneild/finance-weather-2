@@ -43,7 +43,7 @@ if($_POST['LIMIT']){
 // It returns true if first statement executed successfully; false otherwise.
 // Results of first statement are retrieved via $mysqli->store_result()
 // from which we can call ->fetch_row() to see successive rows
-if ($mysqli->multi_query("SELECT TRADES.symbol, COUNT(TRADES.OpenPrice), AVG((100*(TRADES.ClosePrice - TRADES.OpenPrice))/TRADES.OpenPrice) AS percent_gain FROM FORECAST INNER JOIN TRADES ON TRADES.dateID = FORECAST.dateID WHERE ".$RAIN." AND FORECAST.MaxTemp > ".$TEMP." AND FORECAST.MinTemp < ".$TEMP." GROUP BY symbol ORDER BY percent_gain DESC;")) {
+if ($mysqli->multi_query("SELECT SECTOR.SectorName, COUNT(TRADES.OpenPrice), AVG((100*(TRADES.ClosePrice - TRADES.OpenPrice))/TRADES.OpenPrice) AS percent_gain FROM FORECAST INNER JOIN TRADES ON TRADES.dateID = FORECAST.dateID INNER JOIN SECURITIES ON TRADES.symbol = SECURITIES.symbol INNER JOIN SECTOR ON SECTOR.ID = SECURITIES.sectorID WHERE ".$RAIN." AND FORECAST.MaxTemp > ".$TEMP." AND FORECAST.MinTemp < ".$TEMP." GROUP BY SECTOR.SectorName ORDER BY percent_gain DESC;")) {
 
 
     // Check if a result was returned after the call
