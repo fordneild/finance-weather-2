@@ -54,7 +54,6 @@
 	  <option value="Spring">Spring</option>
 	  <option value="Fall">Fall</option>
 	</select>
-	<label> Year: <input name ="Year" type = "number" min=2013 max=2018 step=1/><label>
         <button type="submit">Submit</button>
     </form>
 </div>

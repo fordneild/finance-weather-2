@@ -22,7 +22,6 @@ ini_set('display_errors', true);   // report errors to screen (don't hide from u
 // The associative array called S_POST stores data using names as indices
 $Seasons = $_POST['Seasons'];
 $rSeason = "initialized";
-$Year = $_POST['Year'];
 
 //echo "<p>".$Seasons."</p>";
 // Call the stored procedure named ShowRawScores
@@ -32,17 +31,17 @@ $Year = $_POST['Year'];
 // from which we can call ->fetch_row() to see successive rows
 //Multiple queries to be called.
 if ($Seasons == "Winter") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 12 OR MM = 1 OR MM = 2 AND YY = ".$Year."";
+    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 12 OR MM = 1 OR MM = 2";
 }
 if ($Seasons == "Summer") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 6 OR MM = 7 OR MM = 8 AND YY = ".$Year."";
+    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 6 OR MM = 7 OR MM = 8";
     
 }
 if ($Seasons == "Spring") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 3 OR MM = 4 OR MM = 5 AND YY = ".$Year."";
+    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 3 OR MM = 4 OR MM = 5";
 }
 if ($Seasons == "Fall") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 9 OR MM = 10 OR MM = 11 AND YY = ".$Year."";
+    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 9 OR MM = 10 OR MM = 11";
 }
 
 
