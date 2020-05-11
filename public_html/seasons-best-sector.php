@@ -5,8 +5,7 @@
 <?php
 function outputResultsTableHeader() {
     echo "<tr>";
-    echo "<th> Company Name </th>";
-    echo "<th> Symbol </th>";
+    echo "<th> Sector </th>";
     echo "<th> Avg Gain </th>";
     echo "<th> Volume Traded in Season </th>";
     echo "</tr>";
@@ -47,11 +46,8 @@ if ($Seasons == "Fall") {
 
 
 
-
-
-
 //second query is to find all the stock prices for those dates and avergae them.
-$sql= "SELECT CompanyName, SECURITIES.Symbol, Gain, Volumes FROM SECURITIES JOIN(SELECT Symbol, AVG(100*(TRADES.ClosePrice - TRADES.OpenPrice)/TRADES.OpenPrice) AS Gain, Sum(Volume) AS Volumes FROM TRADES WHERE DateID IN (".$rSeason.") GROUP BY Symbol)AS Calc on SECURITIES.Symbol = Calc.Symbol ORDER BY Gain DESC;";
+$sql= "SELECT SectorName, AVG(Gain) AS STOTAL, SUM(Volumes) FROM SECTOR JOIN (SELECT SectorID, SECURITIES.Symbol, Gain, Volumes FROM SECURITIES JOIN(SELECT Symbol, AVG(100*(TRADES.ClosePrice - TRADES.OpenPrice)/TRADES.OpenPrice) AS Gain, Sum(Volume) AS Volumes FROM TRADES WHERE DateID IN (".$rSeason.") GROUP BY Symbol)AS Calc on SECURITIES.Symbol = Calc.Symbol ORDER BY Gain DESC) AS Calc2 on SECTOR.ID = Calc2.SectorID GROUP BY SectorName ORDER BY STOTAL DESC;";
 if ($mysqli->multi_query($sql)) {
     // Check if a result was returned after the call
     if ($result = $mysqli->store_result()) {

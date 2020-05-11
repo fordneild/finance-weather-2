@@ -32,16 +32,44 @@
 </div>
 
 <div class="question">
-    <h1>Given a season, find the stock highest avg price increase ordered best to worse</h1>
+    <h1>Given a season and year, find the stock highest avg price increase ordered best to worse</h1>
     <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="seasons-best-stock.php" method="post">
         <label for="Seasons"> Choose a Season:</label>
-	<select name="Seasons" id="Seasons">
+	<select name="Seasons">
 	  <option value="Summer">Summer</option>
 	  <option value="Winter">Winter</option>
 	  <option value="Spring">Spring</option>
 	  <option value="Fall">Fall</option>
 	</select>
+	<label> Year: <input name ="Year" type = "number" min=2013 max=2018 step=1/><label>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+
+<div class="question">
+    <h1>Given a sector and year, find the sector avg price increase ordered best to worse</h1>
+    <p>Note: We only have work days from March 2013 - January 2018</p>
+    <form action="seasons-best-sector.php" method="post">
+        <label for="Seasons"> Choose a Season:</label>
+        <select name="Seasons">
+          <option value="Summer">Summer</option>
+          <option value="Winter">Winter</option>
+          <option value="Spring">Spring</option>
+          <option value="Fall">Fall</option>
+        </select>
+        <label> Year: <input name="Year" type="number" min=2013 max=2018 step=1/><label>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<div class="question">
+    <h1>Given a company symbol and whether it rained, find the company stock high and low ordered by date</h1>
+    <p>Note: We only have work days from March 2013 - January 2018</p>
+    <form action="company-rain.php" method="post">
+        <label>Company Symbol: <input name="Symbol" type="text"/></label>
+        <label>Rain: <input name="RAIN" type="checkbox" min=1 max=31 step=1/></label>
         <button type="submit">Submit</button>
     </form>
 </div>
