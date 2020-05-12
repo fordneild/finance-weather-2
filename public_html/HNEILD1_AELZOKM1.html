@@ -6,14 +6,60 @@
 
   <title>Finance Weather DB</title>
   <style>
+
+    body{
+        display: flex;
+        flex-direction: column;
+        background-color: black;
+    }
+    header{
+        background-size: 100%;
+        background-image: url("https://isardasorensen.files.wordpress.com/2018/05/tp-lightning-nyc-5-10-18.jpg");
+        align-self: center;
+        text-align: center;
+        background-position: 0px -70px;
+        border: 1px solid black;
+        padding: 15px; 
+        border-radius: 12px;
+        height: 250px;
+        margin-bottom: 20px;
+        color: white;
+    }
     .question{
         border: 1px solid black;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 12px;
+        background-color: white;
+    }
+
+    .question > h1 {
+        font-family: Arial;
+        margin: 0;
+        margin-bottom: 10px;
+
+    }
+
+    .question>form{
+        display: flex;
+    }
+
+    .question>form>label{
+        margin-right: 10px;
+    }
+
+    .question>form>select{
+        margin-right: 10px;
     }
   </style>
 
 </head>
 
 <body>
+<header>
+    <h1>The Finance & Weather Database</h1>
+    <h2>Note: We have days the NYSE was open from Feb 8th 2013 through Feb 7th 2018</h2>
+</header>
 <div class="question">
     <h1>Find all the dates we have information on</h1>
     <form action="dates.php" method="post">
@@ -21,8 +67,7 @@
     </form>
 </div>
 <div class="question">
-    <h1>Given a date, find the weather information</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
+    <h1>Find the weather on a day</h1>
     <form action="date-to-weather.php" method="post">
         <label>Month: <input name="MM" type="number" min=1 max=12 step=1/></label>
         <label>Day: <input name="DD" type="number" min=1 max=31 step=1/></label>
@@ -33,7 +78,6 @@
 
 <div class="question">
     <h1>Given a season and year, find the stock highest avg price increase ordered best to worse</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="seasons-best-stock.php" method="post">
         <label for="Seasons"> Choose a Season:</label>
 	<select name="Seasons">
@@ -50,7 +94,6 @@
 
 <div class="question">
     <h1>Given a sector and year, find the sector avg price increase ordered best to worse</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="seasons-best-sector.php" method="post">
         <label for="Seasons"> Choose a Season:</label>
         <select name="Seasons">
@@ -66,7 +109,6 @@
 
 <div class="question">
     <h1>Given a company symbol and whether it rained, find the company stock high and low ordered by date</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="company-rain.php" method="post">
         <label>Company Symbol: <input name="Symbol" type="text"/></label>
         <label>Rain: <input name="RAIN" type="checkbox" min=1 max=31 step=1/></label>
@@ -75,8 +117,7 @@
 </div>
 
 <div class="question">
-    <h1>Given a temp and rain level, find the stocks that had the highest percent growth across all days that meet those conditions</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
+    <h1>Find the stocks with the highest percent growth on days like...</h1>
     <form action="weather-to-best-stocks.php" method="post">
         <label>Temp(F): <input name="TEMP" type="number" step=10/></label>
         <label>Rain: <input name="RAIN" type="checkbox" min=1 max=31 step=1/></label>
@@ -85,8 +126,7 @@
     </form>
 </div>
 <div class="question">
-    <h1>Given a temp and rain level, find the sectors that had the highest percent growth across all days that meet those conditions</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
+    <h1>Find the sector with the highest percent growth on days like...</h1>
     <form action="weather-to-best-sectors.php" method="post">
         <label>Temp(F): <input name="TEMP" type="number" step=10/></label>
         <label>Rain: <input name="RAIN" type="checkbox" min=1 max=31 step=1/></label>
@@ -96,7 +136,6 @@
 </div>
 <div class="question">
     <h1>Given a stock, find the temp ranges that had the highest percent growth</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="stock-to-best-weather.php" method="post">
         <label>Stock: <input name="SYMBOL" type="text" maxLength=4/></label>
         <label>Max Results: <input name="LIMIT" type="number" min=0 max=20 step=5/></label>
@@ -105,7 +144,6 @@
 </div>
 <div class="question">
     <h1>For all sectors, find the temp ranges that had the highest percent growth</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="sector-to-best-weather.php" method="post">
         <label>Max Results: <input name="LIMIT" type="number" min=0 max=20 step=5/></label>
         <button type="submit">Submit</button>
@@ -113,7 +151,6 @@
 </div>
 <div class="question">
     <h1>Given a stock, find the busiest trading month</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="stock-to-busiest-month.php" method="post">
         <label>Stock: <input name="SYMBOL" type="text" maxLength=4/></label>
         <label>Max Results: <input name="LIMIT" type="number" min=0 max=20 step=5/></label>
@@ -122,11 +159,59 @@
 </div>
 <div class="question">
     <h1>For all sectors, find the busiest trading month</h1>
-    <p>Note: We only have work days from March 2013 - January 2018</p>
     <form action="sector-to-busiest-month.php" method="post">
         <button type="submit">Submit</button>
     </form>
 </div>
+<div class="question">
+    <h1>Given a month and a temp and rain, find the stocks with the highest percent growth</h1>
+    <form action="now-to-best-stocks.php" method="post">
+        <label>Temp(F): <input name="TEMP" type="number" step=1 /></label>
+        <label>Rain: <input name="RAIN" type="checkbox"></label>
+        <label> Choose a Month:</label>
+        <select name="MM">
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">Aug</option>
+          <option value="9">Sept</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+        <label>Max Results: <input name="LIMIT" type="number" min=0 max=20 step=1 /></label>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<div class="question">
+    <h1>Given a month and a temp and rain, find the sectors with the highest percent growth</h1>
+    <form action="now-to-best-sectors.php" method="post">
+        <label>Temp(F): <input name="TEMP" type="number" step=1 /></label>
+        <label>Rain: <input name="RAIN" type="checkbox"></label>
+        <label> Choose a Month:</label>
+        <select name="MM">
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">Aug</option>
+          <option value="9">Sept</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+        <label>Max Results: <input name="LIMIT" type="number" min=0 max=20 step=1 /></label>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
 
 </body>
 
