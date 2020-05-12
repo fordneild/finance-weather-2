@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # This script is used to run PHP scripts. It exists because the CS webserver
 # runs PHP scripts under the UID of their owner, but doing that requires the
 # PHP interpreter to be launched from within the owner's home directory, so

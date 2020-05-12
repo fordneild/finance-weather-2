@@ -1,0 +1,5 @@
+
+"SELECT RAIN, AVG(100*(Final.ClosePrice-Final.OpenPrice)/Final.OpenPrice), SUM(Volume) FROM (SELECT Symbol, OpenPrice, ClosePrice, Volume, SectorID, R\
+AIN FROM (((TRADES JOIN SECURITIES ON (TRADES.Symbol = SECURITIES.Symbol)) AS Prices JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST  WHERE ".$RAIN\
+.") AS WEATHER ON (Prices.DateID = WEATHER.DateID)) AS PW JOIN SECTOR ON (PW.SectorID = SECTOR.ID) WHERE SECTOR.SectorName = "'.$Sector.'")) AS Final GROUP \
+BY RAIN ORDER BY RAIN ASC;";

@@ -26,7 +26,7 @@ ini_set('display_errors', true);   // report errors to screen (don't hide from u
 // Collect the data input posted here from the calling page
 // The associative array called S_POST stores data using names as indices
 $TEMP = $_POST['TEMP'];
-if(isset($_POST['RAIN'])){
+if($_POST['RAIN']){
     $RAIN = "FORECAST.Precipitation > 0";
 }else{
     $RAIN = "FORECAST.Precipitation = 0";
@@ -82,7 +82,7 @@ if ($mysqli->multi_query("SELECT TRADES.symbol, COUNT(TRADES.OpenPrice), AVG((10
                     }
                     echo "</tr>";
 
-                    if($counter>=$LIMIT){
+                    if($counter>$LIMIT){
                         break;
                     }
                 } while ($row = $result->fetch_row());

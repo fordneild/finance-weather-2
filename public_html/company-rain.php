@@ -5,10 +5,14 @@
 <?php
 function outputResultsTableHeader() {
     echo "<tr>";
-    echo "<th> Company Name </th>";
     echo "<th> Symbol </th>";
-    echo "<th> Avg Gain </th>";
-    echo "<th> Volume Traded in Season </th>";
+    echo "<th> Rainfall (inches) </th>";
+    echo "<th> Opening Price </th>";
+    echo "<th> Stock High </th>";
+    echo "<th> Stock Low </th>";
+    echo "<th> Closing Price </th>";
+    echo "<th> Volume </th>";
+
     echo "</tr>";
 }
 // Open a database connection
@@ -20,38 +24,19 @@ ini_set('error_reporting', E_ALL); // report errors of all types
 ini_set('display_errors', true);   // report errors to screen (don't hide from user)
 // Collect the data input posted here from the calling page
 // The associative array called S_POST stores data using names as indices
-$Seasons = $_POST['Seasons'];
-$rSeason = "initialized";
-$Year = $_POST['Year'];
-
-//echo "<p>".$Seasons."</p>";
-// Call the stored procedure named ShowRawScores
-// "multi_query" executes given (multiple-statement) MySQL query
-// It returns true if first statement executed successfully; false otherwise.
-// Results of first statement are retrieved via $mysqli->store_result()
-// from which we can call ->fetch_row() to see successive rows
-//Multiple queries to be called.
-if ($Seasons == "Winter") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 12 OR MM = 1 OR MM = 2 AND YY = ".$Year."";
-}
-if ($Seasons == "Summer") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 6 OR MM = 7 OR MM = 8 AND YY = ".$Year."";
-    
-}
-if ($Seasons == "Spring") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 3 OR MM = 4 OR MM = 5 AND YY = ".$Year."";
-}
-if ($Seasons == "Fall") {
-    $rSeason = "SELECT ID AS DateID FROM DATES WHERE MM = 9 OR MM = 10 OR MM = 11 AND YY = ".$Year."";
+$Symbol = $_POST['Symbol'];
+if(isset($_POST['RAIN'])){
+    $RAIN = "FORECAST.Precipitation > 0";
+}else{
+    $RAIN = "FORECAST.Precipitation = 0";
 }
 
 
 
 
+$sql= "SELECT Symbol, Rain, AVG(OpenPrice), AVG(High), AVG(Low), AVG(ClosePrice), AVG(Volume) FROM (SELECT * FROM TRADES WHERE TRADES.Symbol = '".$Symbol."') AS Prices JOIN (SELECT DateID, Precipitation AS RAIN FROM DATES JOIN FORECAST ON (DATES.ID = FORECAST.DateID) WHERE ".$RAIN.")AS Weather ON (Prices.DateID = Weather.DateID) Group BY Rain ORDER BY Rain ASC;";
 
 
-//second query is to find all the stock prices for those dates and avergae them.
-$sql= "SELECT CompanyName, SECURITIES.Symbol, Gain, Volumes FROM SECURITIES JOIN(SELECT Symbol, AVG(100*(TRADES.ClosePrice - TRADES.OpenPrice)/TRADES.OpenPrice) AS Gain, Sum(Volume) AS Volumes FROM TRADES WHERE DateID IN (".$rSeason.") GROUP BY Symbol)AS Calc on SECURITIES.Symbol = Calc.Symbol ORDER BY Gain DESC;";
 if ($mysqli->multi_query($sql)) {
     // Check if a result was returned after the call
     if ($result = $mysqli->store_result()) {

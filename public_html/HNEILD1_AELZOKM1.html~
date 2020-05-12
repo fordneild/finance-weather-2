@@ -138,10 +138,9 @@
     </form>
 </div>
 <div class="question">
-    <h1>Given a Sector, What is the most stable stock in this database?</h1>
+    <h1>What is the most stable stock in this database?</h1>
     <p>Note: We only have work days from March 2013 - January 2018</p>
-    <form action="stable.php" method="post">
-        <label> Sector: <input name="Sector" type="Text"></label>
+    <form action="sector-to-busiest-month.php" method="post">
         <button type="submit">Submit</button>
     </form>
 </div>

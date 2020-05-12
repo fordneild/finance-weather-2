@@ -1,14 +1,13 @@
 <head>
 	<title>Show Prices</title>
- </head>
- <body>
- <?php
+</head>
+<body>
+<?php
 function outputResultsTableHeader() {
     echo "<tr>";
-    echo "<th> Company Name </th>";
-    echo "<th> Symbol </th>";
-    echo "<th> Avg Gain </th>";
-    echo "<th> Volume Traded in Season </th>";
+    echo "<th> Rainfall (inches) </th>";
+    echo "<th> AVG Gain </th>";
+    echo "<th> Total Volume Traded</th>";
     echo "</tr>";
 }
 // Open a database connection
@@ -20,36 +19,24 @@ ini_set('error_reporting', E_ALL); // report errors of all types
 ini_set('display_errors', true);   // report errors to screen (don't hide from user)
 // Collect the data input posted here from the calling page
 // The associative array called S_POST stores data using names as indices
-//if(isset($_POST['Seasons']){
-    //$Seasons = $_POST['Seasons'];
-//}else{
-$Seasons = "Fall";
-//}
+$Sector = $_POST['Sector'];
+if(isset($_POST['RAIN'])){
+    $RAIN = "FORECAST.Precipitation > 0";
+}else{
+    $RAIN = "FORECAST.Precipitation = 0";
+}
 
-echo "<p>".$Seasons."</p>";
-// Call the stored procedure named ShowRawScores
-// "multi_query" executes given (multiple-statement) MySQL query
-// It returns true if first statement executed successfully; false otherwise.
-// Results of first statement are retrieved via $mysqli->store_result()
-// from which we can call ->fetch_row() to see successive rows
-//Multiple queries to be called.
-//if ($Seasons = "Winter") {
-//    $sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 12 OR MM = 1 OR MM = 2;";
-//}
-//if ($Seasons = "Summer") {
-//    $sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 6 OR MM = 7 OR MM = 8;";
-//    echo "Reached HERE";
-//}
-//if ($Seasons = "Spring") {
-//    $sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 3 OR MM = 4 OR MM = 5;";
-//}
-//if ($Seasons = "Fall") {
-//    $sql = "CREATE OR REPLACE VIEW rSeason AS SELECT * FROM DATES WHERE MM = 9 OR MM = 10 OR MM = 11;";
-//}
 
-$sql = "SELECT DateID, MM, DD, YY FROM DATES;"
-//second query is to find all the stock prices for those dates and avergae them.
-//$sql.= "SELECT CompanyName, Symbol, GAIN, Volume FROM SECURITIES JOIN (SELECT Symbol, AVG(100*(TRADES.ClosePrice - TRADES.OpenPrice)/TRADES.OpenPrice) AS GAIN, Volume FROM TRADES WHERE DateID in rSeasons GROUP BY Symbol) AS Calc on SECURITIES.Symbol = Calc.Symbol;";
+$sql = "SELECT RAIN, AVG((100*(PRICES.ClosePrice - PRICES.OpenPrice)/PRICES.OpenPrice)), SUM(Volume) FROM SECURITIES JOIN (SELECT Symbol, OpenPrice, ClosePrice, Volume, RAIN FROM TRADES JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST WHERE ".$RAIN.")AS WEATHER ON (TRADES.DateID = WEATHER.DateID)) AS PRICES ON (SECURITIES.Symbol = PRICES.Symbol) WHERE SECURITIES.SectorID in (SELECT ID AS SectorID FROM SECTOR WHERE SectorName = '".$Sector."') GROUP BY RAIN ORDER BY RAIN ASC;";
+
+
+//$sql = "SELECT RAIN, AVG(100*Final.ClosePrice-Final.OpenPrice)/Final.OpenPrice), Sum(Volume) FROM SECTOR JOIN (SELECT * FROM SECURITIES JOIN (SELECT Symbol, OpenPrice, ClosePrice, Volume, RAIN FROM TRADES JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST WHERE ".$RAIN.")AS WEATHER ON (TRADES.DateID = WEATHER.DateID)) AS Prices ON (SECURITIES.Symbol = Prices.Symbol)) AS Final ON (SECTOR.ID = Final.SectorID) WHERE SECTOR.SectorName = '"$.Sector."' GROUP BY RAIN ORDER BY RAIN ASC;";
+
+
+
+//$sql= "SELECT RAIN, AVG(100*(Final.ClosePrice-Final.OpenPrice)/Final.OpenPrice), SUM(Volume) FROM (SELECT Symbol, OpenPrice, ClosePrice, Volume, SectorID, RAIN FROM (((TRADES JOIN SECURITIES ON (TRADES.Symbol = SECURITIES.Symbol)) AS Prices JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST  WHERE ".$RAIN.") AS WEATHER ON (Prices.DateID = WEATHER.DateID)) AS PW JOIN SECTOR ON (PW.SectorID = SECTOR.ID) WHERE SECTOR.SectorName = "'.$Sector.'")) AS Final GROUP BY RAIN ORDER BY RAIN ASC;";
+
+
 if ($mysqli->multi_query($sql)) {
     // Check if a result was returned after the call
     if ($result = $mysqli->store_result()) {
@@ -78,7 +65,7 @@ if ($mysqli->multi_query($sql)) {
                 do {
                     echo "<tr>";
                     for($i = 0; $i < sizeof($row); $i++){
-                        echo "<td>" . $row[$i] . "</td>";
+                        echo "<td>".$row[$i]."</td>";
                     }
                     echo "</tr>";
                 } while ($row = $result->fetch_row());
