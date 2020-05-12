@@ -1,0 +1,3 @@
+Hanford Neild: hneild1
+Ahmed Elzokm: aelzokm1
+No special instructions needed. Just need the right file permissions and the right dbase-config and you are good to go.
