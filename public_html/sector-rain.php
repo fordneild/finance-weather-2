@@ -5,14 +5,9 @@
 <?php
 function outputResultsTableHeader() {
     echo "<tr>";
-    echo "<th> Symbol </th>";
     echo "<th> Rainfall (inches) </th>";
-    echo "<th> Opening Price </th>";
-    echo "<th> Stock High </th>";
-    echo "<th> Stock Low </th>";
-    echo "<th> Closing Price </th>";
-    echo "<th> Volume </th>";
-
+    echo "<th> AVG Gain </th>";
+    echo "<th> Total Volume Traded</th>";
     echo "</tr>";
 }
 // Open a database connection
@@ -24,7 +19,7 @@ ini_set('error_reporting', E_ALL); // report errors of all types
 ini_set('display_errors', true);   // report errors to screen (don't hide from user)
 // Collect the data input posted here from the calling page
 // The associative array called S_POST stores data using names as indices
-$Symbol = $_POST['Symbol'];
+$Sector = $_POST['Sector'];
 if(isset($_POST['RAIN'])){
     $RAIN = "FORECAST.Precipitation > 0";
 }else{
@@ -32,9 +27,14 @@ if(isset($_POST['RAIN'])){
 }
 
 
+$sql = "SELECT RAIN, AVG((100*(PRICES.ClosePrice - PRICES.OpenPrice)/PRICES.OpenPrice)), SUM(Volume) FROM SECURITIES JOIN (SELECT Symbol, OpenPrice, ClosePrice, Volume, RAIN FROM TRADES JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST WHERE ".$RAIN.")AS WEATHER ON (TRADES.DateID = WEATHER.DateID)) AS PRICES ON (SECURITIES.Symbol = PRICES.Symbol) WHERE SECURITIES.SectorID in (SELECT ID AS SectorID FROM SECTOR WHERE SectorName = '".$Sector."') GROUP BY RAIN ORDER BY RAIN ASC;";
 
 
-$sql= "SELECT Symbol, Rain, AVG(OpenPrice), AVG(High), AVG(Low), AVG(ClosePrice), AVG(Volume) FROM (SELECT * FROM TRADES WHERE TRADES.Symbol = '".$Symbol."') AS Prices JOIN (SELECT DateID, Precipitation AS RAIN FROM DATES JOIN FORECAST ON (DATES.ID = FORECAST.DateID) WHERE ".$RAIN.")AS Weather ON (Prices.DateID = Weather.DateID) Group BY Rain ORDER BY Rain ASC;";
+//$sql = "SELECT RAIN, AVG(100*Final.ClosePrice-Final.OpenPrice)/Final.OpenPrice), Sum(Volume) FROM SECTOR JOIN (SELECT * FROM SECURITIES JOIN (SELECT Symbol, OpenPrice, ClosePrice, Volume, RAIN FROM TRADES JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST WHERE ".$RAIN.")AS WEATHER ON (TRADES.DateID = WEATHER.DateID)) AS Prices ON (SECURITIES.Symbol = Prices.Symbol)) AS Final ON (SECTOR.ID = Final.SectorID) WHERE SECTOR.SectorName = '"$.Sector."' GROUP BY RAIN ORDER BY RAIN ASC;";
+
+
+
+//$sql= "SELECT RAIN, AVG(100*(Final.ClosePrice-Final.OpenPrice)/Final.OpenPrice), SUM(Volume) FROM (SELECT Symbol, OpenPrice, ClosePrice, Volume, SectorID, RAIN FROM (((TRADES JOIN SECURITIES ON (TRADES.Symbol = SECURITIES.Symbol)) AS Prices JOIN (SELECT DateID, Precipitation AS RAIN FROM FORECAST  WHERE ".$RAIN.") AS WEATHER ON (Prices.DateID = WEATHER.DateID)) AS PW JOIN SECTOR ON (PW.SectorID = SECTOR.ID) WHERE SECTOR.SectorName = "'.$Sector.'")) AS Final GROUP BY RAIN ORDER BY RAIN ASC;";
 
 
 if ($mysqli->multi_query($sql)) {

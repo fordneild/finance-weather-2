@@ -6,13 +6,8 @@
 function outputResultsTableHeader() {
     echo "<tr>";
     echo "<th> Symbol </th>";
-    echo "<th> Rainfall (inches) </th>";
-    echo "<th> Opening Price </th>";
-    echo "<th> Stock High </th>";
-    echo "<th> Stock Low </th>";
-    echo "<th> Closing Price </th>";
-    echo "<th> Volume </th>";
-
+    echo "<th> Stability (Percentage of Stock Size)</th>";
+    echo "<th> AVG Daily Volume Traded</th>";
     echo "</tr>";
 }
 // Open a database connection
@@ -24,17 +19,13 @@ ini_set('error_reporting', E_ALL); // report errors of all types
 ini_set('display_errors', true);   // report errors to screen (don't hide from user)
 // Collect the data input posted here from the calling page
 // The associative array called S_POST stores data using names as indices
-$Symbol = $_POST['Symbol'];
-if(isset($_POST['RAIN'])){
-    $RAIN = "FORECAST.Precipitation > 0";
-}else{
-    $RAIN = "FORECAST.Precipitation = 0";
-}
+$Sector = $_POST['Sector'];
+
+
+$sql = "SELECT TRADES.Symbol, AVG(100*(TRADES.High - TRADES.Low)/TRADES.OpenPrice) AS Stability, AVG(Volume) AS AVGV FROM SECURITIES JOIN TRADES ON (SECURITIES.Symbol = TRADES.Symbol) WHERE SECURITIES.SectorID in (SELECT ID AS SectorID FROM SECTOR WHERE SectorName = '".$Sector."') GROUP BY Symbol ORDER BY Stability ASC;";
 
 
 
-
-$sql= "SELECT Symbol, Rain, AVG(OpenPrice), AVG(High), AVG(Low), AVG(ClosePrice), AVG(Volume) FROM (SELECT * FROM TRADES WHERE TRADES.Symbol = '".$Symbol."') AS Prices JOIN (SELECT DateID, Precipitation AS RAIN FROM DATES JOIN FORECAST ON (DATES.ID = FORECAST.DateID) WHERE ".$RAIN.")AS Weather ON (Prices.DateID = Weather.DateID) Group BY Rain ORDER BY Rain ASC;";
 
 
 if ($mysqli->multi_query($sql)) {
